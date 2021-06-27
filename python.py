@@ -1,42 +1,56 @@
 #!/usr/bin/python3
 import cgi
 import subprocess
-import time
+
 print("Access-Control-Allow-Origin:*")
 print("content-type: text/html")
 print()
 
 s=cgi.FieldStorage()
-cmd=s.getvalue("x")
+cmd=s.getvalue("x").split()
+print(cmd)
 
-if "deployment" and "create" and "centos" in cmd :
-    cmd= "kubectl create deployment mydep --image=centos"
-    output = subprocess.getoutput("sudo "+cmd)
+if "deployment" and "create" in cmd :
+    run_cmd= f"kubectl create deployment {cmd[2]} --image={cmd[3]}"
 
-elif "deployment" and "create" and "ubuntu" in cmd:
-    cmd= "kubectl create deployment mydep --image=centos"
-    output = subprocess.getoutput("sudo "+cmd)
+if "create" and "pod" in cmd:
+    print("Running pod please wait ...\n")
+    run_cmd = f"kubectl run {cmd[2]} --image={cmd[3]}"
+    print(run_cmd)
 
-elif cmd=="run":
-    cmd= "docker run -dit "+ s.getvalue("y")
-    output = subprocess.getoutput("sudo "+ cmd)
+elif "expose" and "service" in cmd :
+    run_cmd = f"kubectl expose {cmd[1]} {cmd[2]}"
 
-elif cmd=="exec":
-    cmd= "docker exec -i "+ s.getvalue("y")+" "+s.getvalue("z")
-    output = subprocess.getoutput("sudo "+ cmd)
 
-elif cmd=="download":
-    cmd= "docker pull "+ s.getvalue("y")
-    output = subprocess.getoutput("sudo "+ cmd)
+elif "destroy" and "all" in cmd:
+    run_cmd= f"kubectl delete all --all"
 
-elif cmd=="rmi":
-    cmd= "docker rmi "+s.getvalue("y")+" --force"
-    output = subprocess.getoutput("sudo "+ cmd)
 
+elif "delete" in cmd:
+    run_cmd= f"kubectl delete {cmd[1]} {cmd[2]}"
+
+
+elif "scale" in cmd:
+    run_cmd= f"kubectl scale {cmd[1]}/{cmd[2]} --replicas={cmd[3]}"
+
+
+print(run_cmd)
+check_out = subprocess.getoutput(f"{run_cmd}")
+#check_out = subprocess.run(f"{run_cmd}",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 print("<br>")
 print("<pre>")
-print(output)
+#if check_out.returncode != 0 :
+#    print(f"Some error happend\n\n{check_out.stderr}")
+    
+#else :
+#    print(f"{check_out.stdout}")
+print(check_out)
 print("</pre>")
+    
+    
+
+
+
 
 
 
