@@ -208,7 +208,7 @@ body {
     display: none; 
     position: fixed;
     z-index: 1;
-    padding-top: 100px;
+    padding-top: 20px;
     left: 0;
     top: 0;
     width: 100%;
@@ -266,7 +266,7 @@ body {
   }
   
   .modal-body {
-    padding: 130px 16px;
+    padding: 50px 16px;
     border-radius: 20px;
   }
 
@@ -275,20 +275,23 @@ body {
     hyphens: auto;
   }
 
+  .input1{
+    align-self: center;
+    grid-row: 4/5;
+    border-radius: 70px;
+    padding: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
 
   
   main {
-    display: flex;
-    flex-direction: column;
     transform: rotatex(10deg);
-    /* -webkit-animation: rotateAngle 6s linear infinite; */
-            /* animation: rotateAngle 6s linear infinite; */
   }
   
-  button {
+  .help {
     display: block;
     position: relative;
-    margin: 0.5em 0;
     padding: 0.8em 2.2em;
     cursor: pointer;
     background: #14a6ca;
@@ -302,11 +305,11 @@ body {
     mix-blend-mode: color-dodge;
     perspective: 500px;
     transform-style: preserve-3d;
-    left: 750px;
-    bottom: 250px;
+    left: 700px;
+    bottom: 200px;
   }
   
-  button:before, button:after {
+  .help:before, .help:after {
     --z: 0px;
     position: absolute;
     top: 0;
@@ -321,26 +324,26 @@ body {
     transform-style: preserve-3d;
     transform: translate3d(calc(var(--z) * 0px), calc(var(--z) * 0px), calc(var(--z) * 0px));
   }
-  button span {
+  .help > span {
     mix-blend-mode: none;
     display: block;
   }
-  button:after {
+  .help:after {
     background-color: #00eeff;
   }
-  button:before {
+  .help:before {
     background-color: #171bff;
   }
-  button:hover {
+  .help:hover {
     background-color: #5b66ff;
     transition: background 0.3s 0.1s;
   }
-  button:hover:before {
+  .help:hover:before {
     --z: 0.04;
     -webkit-animation: translateWobble 2.2s ease forwards;
             animation: translateWobble 2.2s ease forwards;
   }
-  button:hover:after {
+  .help:hover:after {
     --z: -0.06;
     -webkit-animation: translateWobble 2.2s ease forwards;
             animation: translateWobble 2.2s ease forwards;

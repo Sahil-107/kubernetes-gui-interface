@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,86 +8,91 @@
     <link rel="stylesheet" href="index.css">
     <title>Kubernetes GUI</title>
 </head>
+
 <body>
-    <main>
-        <button id="myBtn2"><span>Help</span></button>
-    </main>
-    
-<div class="textbox">
-    <div class="textbox-box">
-      <div class="textbox-face textbox-side"></div>
-      <div class="textbox-face textbox-bottom"></div>
-      <div class="textbox-face textbox-top"></div>
-      <div class="textbox-field">
-        <div class="textbox-label">Enter Command Here</div>
+    <div class="main">
+        <main>
+            <button class="help" id="myBtn2"><span>Help</span></button>
+        </main>
+        <div class="textbox">
+            <div class="textbox-box">
+                <div class="textbox-face textbox-side"></div>
+                <div class="textbox-face textbox-bottom"></div>
+                <div class="textbox-face textbox-top"></div>
+                <div class="textbox-field">
+                    <div class="textbox-label">Enter Command Here</div>
 
-        <input id="input" class="textbox-text" type="text" placeholder="Type here..."/>
-      
-    </div>
-      <div class="textbox-action" id="myBtn1">
-        <div class="textbox-face textbox-side"></div>
-        <div class="textbox-face textbox-top"></div>
-        <div class="textbox-face textbox-bottom"></div>
-        <svg viewBox="0 0 24 24">
-          <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
-        </svg>
-      </div>
-    </div>
-  </div>
+                    <input id="input" class="textbox-text" type="text" placeholder="Type here..." />
 
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close">&times;</span>
-            <h2>Output:-</h2>
+                </div>
+                <div class="textbox-action" id="myBtn1">
+                    <div class="textbox-face textbox-side"></div>
+                    <div class="textbox-face textbox-top"></div>
+                    <div class="textbox-face textbox-bottom"></div>
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
+                    </svg>
+                </div>
+            </div>
         </div>
-        <p id="text" class="modal-body">
-            Please wait...
-        </p>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>Output:-</h2>
+                </div>
+                <p id="text" class="modal-body">
+                    Please Wait!!!!
+                </p>
+            </div>
+
+        </div>
     </div>
 
-</div>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
 
-<script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
+        // Get the buttons that opens the modal
+        var btn1 = document.getElementById("myBtn1");
+        var btn2 = document.getElementById("myBtn2");
 
-    // Get the buttons that opens the modal
-    var btn1 = document.getElementById("myBtn1");
-    var btn2 = document.getElementById("myBtn2");
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+        // When the user clicks the button, open the modal 
+        btn1.onclick = function () {
+            modal.style.display = "block";
+            var objXHR = new XMLHttpRequest();
+            objXHR.open("GET", "http://192.168.29.219/cgi-bin/python.py?x=" + document.getElementById('input').value);
+            objXHR.send();
 
-    // When the user clicks the button, open the modal 
-    btn1.onclick = function () {
-        modal.style.display = "block";
-        var objXHR = new XMLHttpRequest();
-        objXHR.open("GET", "http://192.168.29.219/cgi-bin/python.py?x=" + document.getElementById('input').value);
-        objXHR.send();
-
-        objXHR.onload = function () {
-            document.getElementById("text").innerHTML = objXHR.responseText + "Deployment Created";
+            objXHR.onload = function () {
+                document.getElementById("text").innerHTML = objXHR.responseText + "Deployment Created";
+            }
+            // document.getElementById("text").innerHTML =    
         }
-    }
 
-    btn2.onclick = function () {
-        modal.style.display = "block";
-        document.getElementById("text").innerHTML = "<h3>These are the rules for writing commands:-</h3><br> 1. Write the resource name first!<br> 2. Write the image name!";
-    }
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-        document.getElementById("text").innerHTML ="Please wait..."
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
+        btn2.onclick = function () {
+            modal.style.display = "block";
+            document.getElementById("text").innerHTML = "<h3>These are the rules for writing commands:-</h3><br> 1. Write the command first. (Expose, Create, Run, Delete, Scale)<br> 2. Write the resource. (Pod, Deployment, Service)<br> 3. Write the resource name (mypod, mydeployment, myservice) <br> 4. Image name or Port number or Number of Replicas [If exists] (Centos, Ubuntu, Httpd, 8080, 80) <br><br> <b><ul><li> To create deployment:</b> create deployment [deployment_name] [image_name]<br><li><b> To delete resource:</b> delete [resource_name]<br><b><li> To create pod:</b> create pod [pod_name] [image_name]<br><b><li> To expose service:</b> expose service [service_name] [target_port]<br><b><li> To delete Environment:</b> destroy all<br><b><li> To scale replica:</b> scale [resource_name] [number_of_replicas]<br></ul>";
+        }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            document.getElementById("text").innerHTML = "Please wait..."
             modal.style.display = "none";
         }
-    }
-</script>
-    
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.getElementById("text").innerHTML = "Please wait..."
+            }
+        }
+    </script>
+
 </body>
+
 </html>
