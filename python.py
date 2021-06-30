@@ -8,7 +8,6 @@ print()
 
 s=cgi.FieldStorage()
 cmd=s.getvalue("x").split()
-print(cmd)
 
 if "deployment" and "create" in cmd :
     run_cmd= f"kubectl create deployment {cmd[2]} --image={cmd[3]}"
@@ -34,14 +33,12 @@ elif "scale" in cmd:
     run_cmd= f"kubectl scale {cmd[1]}/{cmd[2]} --replicas={cmd[3]}"
 
 
-print(run_cmd)
-check_out = subprocess.getoutput(f"{run_cmd}")
+check_out = subprocess.getoutput(f"sudo +{run_cmd}")
 #check_out = subprocess.run(f"{run_cmd}",shell=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 print("<br>")
 print("<pre>")
 #if check_out.returncode != 0 :
 #    print(f"Some error happend\n\n{check_out.stderr}")
-    
 #else :
 #    print(f"{check_out.stdout}")
 print(check_out)
